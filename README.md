@@ -2,7 +2,7 @@
 
 ## To clone down the repo
 
-Create a new **public GitHub repository**. Do not initialise the project with a readme, .gitignore or license.
+Create a new ******public GitHub repository*****. Do not initialise the project with a readme, .gitignore or license.
 From your cloned local version of this project you'll want to push your code to your new repository using the following commands:
 
 ```
