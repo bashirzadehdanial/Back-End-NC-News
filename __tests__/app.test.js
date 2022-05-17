@@ -3,7 +3,7 @@ const seed= require('../db/seeds/seed.js');
 const data= require('../db/data/test-data');
 const request= require('supertest');
 const app = require('../app.js');
-const { response } = require('../app.js');
+
 
 
 beforeEach(()=>seed(data))
@@ -24,6 +24,11 @@ describe('/api/topics',()=>{
                      description: expect.any(String)
                  })
             })
+        })
+    })
+    test('GET-404 - Returns a not found message when the topic does not exist',()=>{
+        return request(app).get('/api/banana').then((response)=>{
+            expect(response.status).toBe(404)
         })
     })
 })

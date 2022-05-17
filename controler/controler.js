@@ -1,4 +1,4 @@
-const { fetchTopics } = require("../model/model")
+const { fetchTopics} = require("../model/model")
 
 
 function getTopics(request,response){
@@ -9,5 +9,8 @@ function getTopics(request,response){
          next(err)
      })
 }
+
+
+
 
 module.exports= {getTopics}
