@@ -4,9 +4,6 @@ const data= require('../db/data/test-data');
 const request= require('supertest');
 const app = require('../app.js');
 
-
-
-
 beforeEach(()=>seed(data))
 afterAll(()=>{
     db.end()
@@ -28,6 +25,7 @@ describe('/api/topics',()=>{
         })
     })
     test('GET-404 - Returns a not found message when the topic does not exist',()=>{
+
         return request(app)
         .get('/api/topi')
         .expect(404)
@@ -73,6 +71,4 @@ describe('/api/articles/:article_id',()=>{
       });
   });
 }); 
-
-
 
