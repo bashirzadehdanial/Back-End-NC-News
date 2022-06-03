@@ -72,3 +72,38 @@ describe('/api/articles/:article_id',()=>{
   });
 }); 
 
+describe("PATCH /api/articles/:article_id", () => {
+    test("200:return the updated vote in the response body", () => {
+      const reqBody = { inc_votes: 10 };
+      return request(app)
+        .patch("/api/articles/1")
+        .send(reqBody)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article.article_id).toBe(1);
+          expect(body.article.votes).toBe(110);
+        })
+    })
+    test("404: when provided with a valid but non-existent article id", () => {
+      const reqBody = { inc_votes: 1 };
+      return request(app)
+        .patch("/api/articles/1000")
+        .send(reqBody)
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toBe("not found");
+        });
+    });
+
+    test("400: returns bad request error message when called with an article id of wrong data type", () => {
+      const reqBody = { inc_votes: 7 };
+         return request(app)
+        .patch("/api/articles/bananas")
+        .send(reqBody)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid input");
+        });
+    });
+});
+

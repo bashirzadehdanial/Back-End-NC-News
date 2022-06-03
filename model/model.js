@@ -16,7 +16,20 @@ function fetchArticle(id){
     })
 }
 
+function updatePatchArticle(votes,articleId){
+     return db.query(
+        `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`,
+        [votes, articleId]
+      )
+      .then((article) => {
+        if (article.rows.length === 0) {
+          return Promise.reject({ status: 404, msg: "not found" });
+        }
+        return article.rows[0];
+      });
+  }; 
 
 
 
-module.exports= {fetchTopics, fetchArticle}
+
+module.exports= {fetchTopics, fetchArticle, updatePatchArticle}
