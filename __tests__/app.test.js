@@ -150,6 +150,45 @@ describe('/api/users', () => {
 })
 });
 
+describe("GET /api/articles/:article_id", () => {
+  test("200: responds with a single article when passed article_id", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
+        expect(body).toEqual(
+          expect.objectContaining( {
+            article_id: 1,
+            title: 'Living in the shadow of a great man',
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'I find this existence challenging',
+            created_at: '2020-07-09T20:11:00.000Z',
+            votes: 100
+          })
+        );
+      });
+  });
+  test("404: returns error message when called a valid data but non-existent article id", () => {
+    return request(app)
+      .get("/api/articles/666")
+      .expect(404)
+      .then((res) => {
+        expect(res.body.msg).toBe("not found");
+      });
+  });
+
+  test("400: responds with status code 400 and msg 'Invalid input' when entering wrong data type for article_id", () => {
+    return request(app)
+      .get("/api/articles/bananas")
+      .expect(400)
+      .then((res) => {
+        expect(res.body.msg).toBe("Invalid input");
+      });
+  });
+})
+
 
 
      
