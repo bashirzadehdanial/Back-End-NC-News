@@ -1,5 +1,5 @@
 
-const { fetchTopics, fetchArticle, updatePatchArticle} = require("../model/model")
+const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers} = require("../model/model")
 
 
 function getTopics(request,response,next){
@@ -31,10 +31,23 @@ function patchArticleVoteById(request,response,next){
     .catch((err)=>{
         next(err)
     })
+} 
+
+function getUsers(request,response){
+    fetchUsers().then((users)=>{
+        console.log(users)
+        response.status(200).send({users:users})
+    })
+    .catch((err)=>{
+        next(err)
+    })
 }
 
 
 
 
-module.exports= {getTopics, getArticles, patchArticleVoteById}
+
+
+
+module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers}
 

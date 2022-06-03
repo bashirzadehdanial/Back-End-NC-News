@@ -29,7 +29,15 @@ function updatePatchArticle(votes,articleId){
       });
   }; 
 
+function fetchUsers(){
+    return db.query('SELECT * FROM users').then((result)=>{
+        if(!result.rows.length) return Promise.reject({status: 404, msg: "not found"})
+        return result.rows
+    })
+ }
 
 
 
-module.exports= {fetchTopics, fetchArticle, updatePatchArticle}
+
+module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers}
+
