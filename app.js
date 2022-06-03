@@ -19,7 +19,7 @@ app.patch('/api/articles/:article_id',patchArticleVoteById)
 
 app.get('api/users',getUsers)
 
-app.get('/api/articles/:article_id/comments',getCommentsByID )
+app.get('/api/articles/:article_id/comments', getCommentsByID )
 
 
 

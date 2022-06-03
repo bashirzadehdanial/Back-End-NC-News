@@ -36,15 +36,26 @@ function fetchUsers(){
     })
  }
 
-function fetchCommentById(article_id){
-    return db.query('SELECT * FROM comment WHERE article_id=$1',[article_id]).then((result)=>{
-        if(!result.rows.length) return Promise.reject({status: 404, msg: "not found"})
-        return result.rows
-    })
-}
+
+function fetchCommentsByID(article_id){
+            
+    const bodyArtic = db.query(`SELECT article_id FROM articles WHERE article_id = $1;`, [article_id])
+        
+
+    const bodyComm = db.query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
+        
+    return Promise.all([bodyArtic, bodyComm])
+            .then(([bodyArtic, bodyComm]) => {
+                if(!bodyArtic.rows.length) {
+                return Promise.reject
+                ({ status: 404, msg: `No review found for review_id: ${review_id}`});
+                } 
+                return bodyComm.rows;
+            });
+};
 
 
 
 
-module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,fetchCommentById}
+module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,fetchCommentsByID}
 

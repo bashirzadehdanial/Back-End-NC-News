@@ -150,44 +150,40 @@ describe('/api/users', () => {
 })
 });
 
-describe("GET /api/articles/:article_id", () => {
-  test("200: responds with a single article when passed article_id", () => {
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: should respond with an array of comments for the given article_id", () => {
     return request(app)
-      .get("/api/articles/1")
+      .get("/api/articles/3/comments")
       .expect(200)
-      .then(({ body }) => {
-        expect(body).toBeInstanceOf(Object);
-        expect(body).toEqual(
-          expect.objectContaining( {
-            article_id: 1,
-            title: 'Living in the shadow of a great man',
-            topic: 'mitch',
-            author: 'butter_bridge',
-            body: 'I find this existence challenging',
-            created_at: '2020-07-09T20:11:00.000Z',
-            votes: 100
-          })
-        );
+      .then(({ body: { comments } }) => {
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(2);
+        comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              article_id: expect.any(Number),
+            })
+          );
+        });
       });
   });
-  test("404: returns error message when called a valid data but non-existent article id", () => {
+  test("400: Should return a status code of 400 when an incorrect data type is passed into the endpoint", () => {
     return request(app)
-      .get("/api/articles/666")
-      .expect(404)
-      .then((res) => {
-        expect(res.body.msg).toBe("not found");
+      .get("/api/articles/apple/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Invalid input");
       });
   });
 
-  test("400: responds with status code 400 and msg 'Invalid input' when entering wrong data type for article_id", () => {
-    return request(app)
-      .get("/api/articles/bananas")
-      .expect(400)
-      .then((res) => {
-        expect(res.body.msg).toBe("Invalid input");
-      });
-  });
 })
+
+
 
 
 
