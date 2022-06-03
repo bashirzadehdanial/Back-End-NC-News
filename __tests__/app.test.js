@@ -74,16 +74,29 @@ describe('/api/articles/:article_id',()=>{
 
 describe("PATCH /api/articles/:article_id", () => {
     test("200:return the updated vote in the response body", () => {
-      const reqBody = { inc_votes: 10 };
+      const reqBody = { inc_votes: -20 };
       return request(app)
         .patch("/api/articles/1")
         .send(reqBody)
         .expect(200)
         .then(({ body }) => {
           expect(body.article.article_id).toBe(1);
-          expect(body.article.votes).toBe(110);
+          expect(body.article.votes).toBe(80);
         })
     })
+
+    test("200:return the updated vote in the response body", () => {
+      const reqBody = { inc_votes: 20 };
+      return request(app)
+        .patch("/api/articles/2")
+        .send(reqBody)
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.article.article_id).toBe(2);
+          expect(body.article.votes).toBe(20);
+        })
+    })
+
     test("404: when provided with a valid but non-existent article id", () => {
       const reqBody = { inc_votes: 1 };
       return request(app)
