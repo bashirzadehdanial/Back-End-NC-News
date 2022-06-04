@@ -1,5 +1,7 @@
 const db= require('../db/connection.js');
 
+
+
 function fetchTopics(){
    return db.query('SELECT * FROM topics').then(result=>{
         if(!result.rows.length) return Promise.reject({status: 404, msg: "not found"})
@@ -37,22 +39,6 @@ function fetchUsers(){
  }
 
 
-function fetchCommentsByID(article_id){
-            
-    const bodyArtic = db.query(`SELECT article_id FROM articles WHERE article_id = $1;`, [article_id])
-        
-
-    const bodyComm = db.query(`SELECT * FROM comments WHERE article_id = $1`, [article_id])
-        
-    return Promise.all([bodyArtic, bodyComm])
-            .then(([bodyArtic, bodyComm]) => {
-                if(!bodyArtic.rows.length) {
-                return Promise.reject
-                ({ status: 404, msg: `No review found for review_id: ${review_id}`});
-                } 
-                return bodyComm.rows;
-            });
-};
 
 function fetchGetArticle(){
   return db.query(`
@@ -80,5 +66,5 @@ function fetchGetArticle(){
 
 
 
-module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,fetchCommentsByID, fetchGetArticle}
+module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers, fetchGetArticle}
 

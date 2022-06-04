@@ -1,6 +1,6 @@
 
-const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchCommentsByID, fetchGetArticle} = require("../model/model")
-
+const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchGetArticle} = require("../model/model")
+const { fetchCommentsByID,  addComment} = require("../model/commentModel")
 
 function getTopics(request,response,next){
      fetchTopics().then((topics)=>{
@@ -62,10 +62,26 @@ function accessArticles(request,responsee,next){
 }
 
 
+function postCommentByArticleId(req, res, next){
+    const articleId = req.params.article_id;
+    const commentBody = req.body;
+    addComment(articleId, commentBody)
+      .then((comment) => {
+          console.log(comment,">>>>>>>")
+        res.status(201).send(comment);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  };
 
 
 
 
 
-module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, accessArticles}
+
+
+
+
+module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, accessArticles,postCommentByArticleId}
 

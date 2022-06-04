@@ -206,9 +206,31 @@ describe("GET /api/articles",()=>{
 });
 });
 
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Request takes an object of a username and a body property. Reponds with the posted comment. ", () => {
+    const comment = {
+      author: "rogersop",
+      body: "If you are reading this then you are a... fine example of a human being!",
+    };
 
-
-
+    return request(app)
+      .post("/api/articles/10/comments")
+      .expect(201)
+      .send(comment)
+      .then((response) => {
+        console.log(response,"<<<<<<<<")
+        expect(response.body).toEqual({
+          comment_id: expect.any(Number),
+          body: "If you are reading this then you are a... fine example of a human being!",
+          author: "rogersop",
+          article_id: 10,
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+        });
+      });
+  });
+})
+ 
 
 
 
