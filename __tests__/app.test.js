@@ -183,6 +183,32 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
+describe("GET /api/articles",()=>{
+  test("200: should return all articles including comment count",()=>{
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then((result)=>{
+      expect(result.body.result).toEqual(expect.any(Array));
+      expect(result.body.result).toHaveLength(12);
+      expect(typeof result.body.result[0]).toEqual("object");
+      expect.objectContaining({
+        author: expect.any(String),
+        title: expect.any(String),
+        article_id: expect.any(Number),
+        topic: expect.any(String),
+        body: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+        comment_count: expect.any(String),
+      });
+    });
+});
+});
+
+
+
+
 
 
 

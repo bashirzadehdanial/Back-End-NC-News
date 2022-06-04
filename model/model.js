@@ -54,8 +54,31 @@ function fetchCommentsByID(article_id){
             });
 };
 
+function fetchGetArticle(){
+  return db.query(`
+      SELECT 
+      articles.article_id,    
+      articles.author, 
+      articles.title, 
+      articles.topic, 
+      articles.body, 
+      articles.created_at, 
+      articles.votes, 
+  COUNT(comments.article_id)::INT AS comment_count 
+  FROM articles
+  LEFT JOIN comments ON comments.article_id = articles.article_id 
+  GROUP BY articles.article_id
+  ORDER BY created_at DESC;`).then((result) => {
+    return result.rows;
+});
+}
 
 
 
-module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,fetchCommentsByID}
+
+
+
+
+
+module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,fetchCommentsByID, fetchGetArticle}
 

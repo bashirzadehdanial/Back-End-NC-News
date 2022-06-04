@@ -1,5 +1,5 @@
 
-const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchCommentsByID} = require("../model/model")
+const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchCommentsByID, fetchGetArticle} = require("../model/model")
 
 
 function getTopics(request,response,next){
@@ -52,11 +52,20 @@ function getCommentsByID(request,response,next){
     })
 }
 
+function accessArticles(request,responsee,next){
+    fetchGetArticle().then(result=>{
+        responsee.status(200).send({result})
+    })
+    .catch((err)=>{
+        next(err)
+    })
+}
 
 
 
 
 
 
-module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID}
+
+module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, accessArticles}
 
