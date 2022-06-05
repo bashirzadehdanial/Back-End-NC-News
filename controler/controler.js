@@ -1,5 +1,5 @@
 
-const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchGetArticle} = require("../model/model")
+const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchArticles} = require("../model/model")
 const { fetchCommentsByID,  addComment} = require("../model/commentModel")
 
 function getTopics(request,response,next){
@@ -52,23 +52,13 @@ function getCommentsByID(request,response,next){
     })
 }
 
-function accessArticles(request,responsee,next){
-    fetchGetArticle().then(result=>{
-        responsee.status(200).send({result})
-    })
-    .catch((err)=>{
-        next(err)
-    })
-}
 
-
-function postCommentByArticleId(req, res, next){
-    const articleId = req.params.article_id;
-    const commentBody = req.body;
+function postCommentByArticleId(request, response, next){
+    const articleId = request.params.article_id;
+    const commentBody = request.body;
     addComment(articleId, commentBody)
       .then((comment) => {
-          console.log(comment,">>>>>>>")
-        res.status(201).send(comment);
+        response.status(201).send(comment);
       })
       .catch((err) => {
         next(err);
@@ -76,6 +66,40 @@ function postCommentByArticleId(req, res, next){
   };
 
 
+function getArticlesWithQuery(request, response, next){
+    const { author, topic } = request.query;
+
+    if (author) {
+      checkExists("users", "username", author)
+        .then(() => {
+          fetchArticles(request.query).then((articles) => {
+            response.status(200).send({ articles });
+          });
+        })
+        .catch((err) => {
+          next(err);
+        });
+    } else if (topic) {
+      checkExists("articles", "topic", topic)
+        .then(() => {
+          fetchArticles(request.query).then((articles) => {
+              console.log(request.query)
+            response.status(200).send({ articles });
+          });
+        })
+        .catch((err) => {
+          next(err);
+        });
+    } else {
+      fetchArticles(request.query)
+        .then((articles) => {
+          response.status(200).send( {articles} );
+        })
+        .catch((err) => {
+          next(err);
+        });
+    }
+};
 
 
 
@@ -83,5 +107,7 @@ function postCommentByArticleId(req, res, next){
 
 
 
-module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, accessArticles,postCommentByArticleId}
+
+
+module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, postCommentByArticleId, getArticlesWithQuery}
 

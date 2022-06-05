@@ -1,7 +1,7 @@
 const express= require('express');
 const app= express();
 
-const { getTopics, getArticles, patchArticleVoteById, getUsers, getCommentsByID,postCommentByArticleId, accessArticles} = require('./controler/controler');
+const { getTopics, getArticles, patchArticleVoteById, getUsers, getCommentsByID,postCommentByArticleId, getArticlesWithQuery} = require('./controler/controler');
 const { handlePsqlErrors } = require('./errorHandler');
 const { handleCustomErrors } = require('./errorHandler');
 const { handleServerErrors } = require('./errorHandler');
@@ -21,11 +21,9 @@ app.get('api/users',getUsers)
 
 app.get('/api/articles/:article_id/comments', getCommentsByID )
 
-app.get('/api/articles', accessArticles)
-
 app.post('/api/articles/:article_id/comments', postCommentByArticleId);
 
-
+app.get("/api/articles", getArticlesWithQuery);
 
 
 

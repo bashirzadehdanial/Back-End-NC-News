@@ -4,6 +4,7 @@ const data= require('../db/data/test-data');
 const request= require('supertest');
 const app = require('../app.js');
 const { response } = require('../app.js');
+const sorted=require('jest-sorted');
 
 beforeEach(()=>seed(data))
 afterAll(()=>{
@@ -183,29 +184,6 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
-describe("GET /api/articles",()=>{
-  test("200: should return all articles including comment count",()=>{
-    return request(app)
-    .get('/api/articles')
-    .expect(200)
-    .then((result)=>{
-      expect(result.body.result).toEqual(expect.any(Array));
-      expect(result.body.result).toHaveLength(12);
-      expect(typeof result.body.result[0]).toEqual("object");
-      expect.objectContaining({
-        author: expect.any(String),
-        title: expect.any(String),
-        article_id: expect.any(Number),
-        topic: expect.any(String),
-        body: expect.any(String),
-        created_at: expect.any(String),
-        votes: expect.any(Number),
-        comment_count: expect.any(String),
-      });
-    });
-});
-});
-
 describe("POST /api/articles/:article_id/comments", () => {
   test("201: Request takes an object of a username and a body property. Reponds with the posted comment. ", () => {
     const comment = {
@@ -218,7 +196,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       .expect(201)
       .send(comment)
       .then((response) => {
-        console.log(response,"<<<<<<<<")
         expect(response.body).toEqual({
           comment_id: expect.any(Number),
           body: "If you are reading this then you are a... fine example of a human being!",
@@ -229,7 +206,48 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
+
+
+  test("400: Given an invalid ID, respond with a 400 Invalid input.", () => {
+    const comment = {
+      author: "thebeebop",
+      body: "If you are reading this then you are a... fine example of a human being!",
+    };
+
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .expect(400)
+      .send(comment)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Invalid input");
+      });
+  });
+});
+
+describe("GET /api/articles (queries)", () => {
+  test("200: returns articles sorted by comment_count in descending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles).toBeSortedBy("comment_count", {
+          descending: true,
+        });
+      });
+  });
+  test("200: returns articles that can be ordered by either asc or desc. ", () => {
+    return request(app)
+      .get("/api/articles?sort_by=comment_count&order=asc")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles).toBeSortedBy("comment_count", {
+          descending: false,
+        });
+      });
+  });
+  
 })
+
  
 
 
