@@ -1,16 +1,7 @@
-
-const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchArticles, eraseCommentById, fetchApi} = require("../model/model")
-const { fetchCommentsByID,  addComment} = require("../model/commentModel")
+const {fetchArticle, fetchCommentsByArticleID, addComment, updatePatchArticle, fetchArticles}= require("../model/articleModel")
 const endpointsJSON = require("../endpoints.json");
 
-function getTopics(request,response,next){
-     fetchTopics().then((topics)=>{
-         response.status(200).send({topics})
-     })
-     .catch((err)=>{
-         next(err)
-     })
-}
+
 
 
 function getArticles(request,response,next){
@@ -23,6 +14,17 @@ function getArticles(request,response,next){
      })
 }
 
+function getCommentsByArticleID(request,response,next){
+    const {article_id}= request.params
+    fetchCommentsByArticleID(article_id).then((comments)=>{
+       response.status(200).send({comments})
+    })
+    .catch((err) => {
+        next(err);
+    })
+}
+
+
 function patchArticleVoteById(request,response,next){
     const { inc_votes: votes } = request.body;
     const { article_id: articleId } = request.params;
@@ -33,25 +35,6 @@ function patchArticleVoteById(request,response,next){
         next(err)
     })
 } 
-
-function getUsers(request,response, next){
-    fetchUsers().then((users)=>{
-        response.status(200).send({users:users})
-    })
-    .catch((err)=>{
-        next(err)
-    })
-}
-
-function getCommentsByID(request,response,next){
-    const {article_id}= request.params
-    fetchCommentsByID(article_id).then((comments)=>{
-       response.status(200).send({comments})
-    })
-    .catch((err) => {
-        next(err);
-    })
-}
 
 
 function postCommentByArticleId(request, response, next){
@@ -65,6 +48,7 @@ function postCommentByArticleId(request, response, next){
         next(err);
       });
   };
+
 
 
 function getArticlesWithQuery(request, response, next){
@@ -102,27 +86,5 @@ function getArticlesWithQuery(request, response, next){
     }
 };
 
-function deleteCommentById(request, response, next){
-    const id = request.params.comment_id;
-    eraseCommentById(id)
-      .then(() => {
-        response.status(204).send({});
-      })
-      .catch((err) => {
-        next(err);
-      });
-  };
 
- 
-function getApi(req, res, next){
-    res.status(200).send({ endpointsJSON });
-  };
-
-
-
-
-
-
-
-module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, postCommentByArticleId, getArticlesWithQuery, deleteCommentById, getApi}
-
+module.exports= {getArticles, getCommentsByArticleID, patchArticleVoteById, postCommentByArticleId, getArticlesWithQuery}

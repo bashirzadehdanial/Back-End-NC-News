@@ -1,7 +1,12 @@
 const express= require('express');
 const app= express();
 
-const { getTopics, getArticles, patchArticleVoteById, getUsers, getCommentsByID,postCommentByArticleId, getArticlesWithQuery, deleteCommentById, getApi} = require('./controler/controler');
+const {getApi}= require('./controler/apiController')
+const {getArticles, getCommentsByArticleID, patchArticleVoteById, postCommentByArticleId, getArticlesWithQuery}= require('./controler/articleController')
+const {getTopics}= require('./controler/topicController')
+const{deleteCommentById}= require('./controler/commentController')
+const{getUsers}= require('./controler/userController')
+
 const { handlePsqlErrors } = require('./errorHandler');
 const { handleCustomErrors } = require('./errorHandler');
 const { handleServerErrors } = require('./errorHandler');
@@ -10,24 +15,25 @@ const { handleServerErrors } = require('./errorHandler');
 app.use(express.json())
 
 
-
+app.get("/api", getApi)
+app.get('api/users',getUsers)
 app.get('/api/topics',getTopics)
 
 app.get('/api/articles/:article_id',getArticles)
+app.get('/api/articles/:article_id/comments', getCommentsByArticleID )
+app.get("/api/articles", getArticlesWithQuery)
+
+
 
 app.patch('/api/articles/:article_id',patchArticleVoteById)
 
-app.get('api/users',getUsers)
-
-app.get('/api/articles/:article_id/comments', getCommentsByID )
-
 app.post('/api/articles/:article_id/comments', postCommentByArticleId)
-
-app.get("/api/articles", getArticlesWithQuery)
 
 app.delete("/api/comments/:comment_id", deleteCommentById)
 
-app.get("/api", getApi)
+
+
+
 
 app.all("/*",(req,res,next)=>{
     res.status(404).send({msg: "not found"})
