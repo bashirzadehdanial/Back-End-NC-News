@@ -1,6 +1,7 @@
 
-const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchArticles, eraseCommentById} = require("../model/model")
+const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchArticles, eraseCommentById, fetchApi} = require("../model/model")
 const { fetchCommentsByID,  addComment} = require("../model/commentModel")
+const endpointsJSON = require("../endpoints.json");
 
 function getTopics(request,response,next){
      fetchTopics().then((topics)=>{
@@ -101,15 +102,20 @@ function getArticlesWithQuery(request, response, next){
     }
 };
 
-function deleteCommentById(req, res, next){
-    const id = req.params.comment_id;
+function deleteCommentById(request, response, next){
+    const id = request.params.comment_id;
     eraseCommentById(id)
       .then(() => {
-        res.status(204).send({});
+        response.status(204).send({});
       })
       .catch((err) => {
         next(err);
       });
+  };
+
+ 
+function getApi(req, res, next){
+    res.status(200).send({ endpointsJSON });
   };
 
 
@@ -118,7 +124,5 @@ function deleteCommentById(req, res, next){
 
 
 
-
-
-module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, postCommentByArticleId, getArticlesWithQuery, deleteCommentById}
+module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, postCommentByArticleId, getArticlesWithQuery, deleteCommentById, getApi}
 

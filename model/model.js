@@ -120,9 +120,20 @@ function eraseCommentById(id){
     });
 };
 
+function fetchApi(){
+  return fs
+    .readFile(
+      "/Users/thebebop/northcoders/backend/be-nc-news/endpoints.json",
+      "utf8"
+    )
+    .then((file) => {
+      return file;
+    });
+};
 
 
 
 
-module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,  fetchArticles, eraseCommentById}
+
+module.exports= {fetchTopics, fetchArticle, updatePatchArticle, fetchUsers,  fetchArticles, eraseCommentById, fetchApi}
 

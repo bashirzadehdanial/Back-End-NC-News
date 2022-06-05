@@ -1,7 +1,7 @@
 const express= require('express');
 const app= express();
 
-const { getTopics, getArticles, patchArticleVoteById, getUsers, getCommentsByID,postCommentByArticleId, getArticlesWithQuery, deleteCommentById} = require('./controler/controler');
+const { getTopics, getArticles, patchArticleVoteById, getUsers, getCommentsByID,postCommentByArticleId, getArticlesWithQuery, deleteCommentById, getApi} = require('./controler/controler');
 const { handlePsqlErrors } = require('./errorHandler');
 const { handleCustomErrors } = require('./errorHandler');
 const { handleServerErrors } = require('./errorHandler');
@@ -21,13 +21,13 @@ app.get('api/users',getUsers)
 
 app.get('/api/articles/:article_id/comments', getCommentsByID )
 
-app.post('/api/articles/:article_id/comments', postCommentByArticleId);
+app.post('/api/articles/:article_id/comments', postCommentByArticleId)
 
-app.get("/api/articles", getArticlesWithQuery);
+app.get("/api/articles", getArticlesWithQuery)
 
-app.delete("/api/comments/:comment_id", deleteCommentById);
+app.delete("/api/comments/:comment_id", deleteCommentById)
 
-
+app.get("/api", getApi)
 
 app.all("/*",(req,res,next)=>{
     res.status(404).send({msg: "not found"})
