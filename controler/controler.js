@@ -1,5 +1,5 @@
 
-const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchArticles} = require("../model/model")
+const { fetchTopics, fetchArticle, updatePatchArticle,fetchUsers, fetchArticles, eraseCommentById} = require("../model/model")
 const { fetchCommentsByID,  addComment} = require("../model/commentModel")
 
 function getTopics(request,response,next){
@@ -101,6 +101,16 @@ function getArticlesWithQuery(request, response, next){
     }
 };
 
+function deleteCommentById(req, res, next){
+    const id = req.params.comment_id;
+    eraseCommentById(id)
+      .then(() => {
+        res.status(204).send({});
+      })
+      .catch((err) => {
+        next(err);
+      });
+  };
 
 
 
@@ -109,5 +119,6 @@ function getArticlesWithQuery(request, response, next){
 
 
 
-module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, postCommentByArticleId, getArticlesWithQuery}
+
+module.exports= {getTopics, getArticles, patchArticleVoteById,getUsers,getCommentsByID, postCommentByArticleId, getArticlesWithQuery, deleteCommentById}
 

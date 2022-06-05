@@ -248,6 +248,34 @@ describe("GET /api/articles (queries)", () => {
   
 })
 
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Comment successfully deleted by selected ID.", () => {
+    return request(app)
+      .delete("/api/comments/3")
+      .expect(204)
+      .then((response) => {
+        expect(response.body).toEqual({});
+      });
+  });
+  test("400: Given an invalid ID data-type, respond with a 400 Invalid input.", () => {
+    return request(app)
+      .delete("/api/comments/donkey")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Invalid input");
+      });
+  });
+  test("404: Given a valid ID that does not exist in db, respond with a 404.", () => {
+    return request(app)
+      .delete("/api/comments/99999999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("not found");
+      });
+  });
+});
+
+
  
 
 
@@ -258,7 +286,6 @@ describe("GET /api/articles (queries)", () => {
 
 
   
-
 
 
 
