@@ -1,4 +1,4 @@
-const {fetchArticle, fetchCommentsByArticleID, addComment, updatePatchArticle, fetchArticles}= require("../model/articleModel")
+const {fetchArticle, fetchCommentsByArticleID, addComment, updatePatchArticle, fetchArticles,checkExists}= require("../model/articleModel")
 const endpointsJSON = require("../endpoints.json");
 
 
@@ -65,16 +65,21 @@ function getArticlesWithQuery(request, response, next){
           next(err);
         });
     } else if (topic) {
-      checkExists("articles", "topic", topic)
-        .then(() => {
+      // checkExists("articles", "topic", topic)
+      //   .then(() => {
+        try {
           fetchArticles(request.query).then((articles) => {
-              console.log(request.query)
-            response.status(200).send({ articles });
-          });
-        })
-        .catch((err) => {
-          next(err);
+            console.log(request.query)
+          response.status(200).send({ articles });
         });
+        } catch (error) {
+          console.log(error);
+        }
+         
+        // })
+        // .catch((err) => {
+        //   next(err);
+        // });
     } else {
       fetchArticles(request.query)
         .then((articles) => {

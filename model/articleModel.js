@@ -50,6 +50,18 @@ function updatePatchArticle(votes,articleId){
       });
   }; 
 
+function checkExists(table,feild,value){
+  return db.query(`SELECT * FROM articles`).then(result=>{
+    return result.rows[0]
+  })
+  // return db.query(
+  //   `SELECT * FROM articles WHERE $1=$2`,[feild,value]).then(result=>{
+  //     if(!result.rows.length) return Promise.reject({status: 404, msg: "not found"})
+  //     const articles= result.rows
+  //     return articles
+  //   })
+}
+
 
 function fetchArticles(query){
     const validSortBy = [
@@ -124,4 +136,4 @@ function fetchArticles(query){
 
 
 
- module.exports= {fetchArticle, addComment, fetchCommentsByArticleID, updatePatchArticle, fetchArticles}
+ module.exports= {fetchArticle, addComment, fetchCommentsByArticleID, updatePatchArticle, fetchArticles, checkExists}

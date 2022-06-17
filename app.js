@@ -19,7 +19,6 @@ app.use(express.json())
 app.get("/api", getApi)
 app.get('api/users',getUsers)
 app.get('/api/topics',getTopics)
-
 app.get('/api/articles/:article_id',getArticles)
 app.get('/api/articles/:article_id/comments', getCommentsByArticleID )
 app.get("/api/articles", getArticlesWithQuery)
