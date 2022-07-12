@@ -125,12 +125,18 @@ describe("PATCH /api/articles/:article_id", () => {
 describe('GET /api/users', () => {
   test('responds with an array of objects, each of which has \'username\' property', () => {
     return request(app).get('/api/users')
-    
-    .then((result) => {
-        console.log(result.body);
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users).toHaveLength(4);
+        expect(body.users).toBeInstanceOf(Array);
+        body.users.forEach((user) => {
+          expect(user).toHaveProperty('username');
+          expect(Object.keys(user).length).toBe(3);
+        });
         });
       });
 });
+
 
 
 describe("GET /api/articles/:article_id/comments", () => {
