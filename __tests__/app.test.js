@@ -122,34 +122,16 @@ describe("PATCH /api/articles/:article_id", () => {
     });
 });
 
-describe('/api/users', () => {
-  test('GET-200 - Should response with an array of object and each of them should have username property', () => {
+describe('GET /api/users', () => {
+  test('responds with an array of objects, each of which has \'username\' property', () => {
     return request(app).get('/api/users')
-    expect(200)
-    .then((response)=>{
-      expect(response.body.users).toHaveLength(4);
-      expect(response.body.users).toBeInstanceOf(Array);
-      response.body.users.forEach((user) => {
-        expect(user).toEqual(
-          expect.objectContaining({
-            username: expect.any(String),
-            name: expect.any(String),
-            avatar_url: expect.any(String),
-          })
-        );
+    
+    .then((result) => {
+        console.log(result.body);
+        });
       });
-    });
-  });
-  test('GET-404 - Returns a not found message when the users does not exist',()=>{
-
-    return request(app)
-    .get('/api/user')
-    .expect(404)
-    .then((result)=>{ 
-        expect(result.body.msg).toBe("not found")
-    })
-})
 });
+
 
 describe("GET /api/articles/:article_id/comments", () => {
   test("200: should respond with an array of comments for the given article_id", () => {

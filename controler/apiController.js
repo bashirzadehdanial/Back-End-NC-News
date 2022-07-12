@@ -1,4 +1,4 @@
-const {fetchApi} = require("../model/apiModel")
+
 const endpointsJSON = require("../endpoints.json");
 
 function getApi(req, res, next){

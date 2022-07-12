@@ -1,15 +1,17 @@
 const {fetchUsers} = require("../model/userModel")
-const endpointsJSON = require("../endpoints.json");
 
 
-function getUsers(request,response, next){
+
+function getUsers(request,response){
     fetchUsers().then((users)=>{
+        console.log(users);
         response.status(200).send({users:users})
     })
-    .catch((err)=>{
-        next(err)
-    })
+    // .catch((err)=>{
+    //     next(err)
+    // })
 }
 
 
 module.exports= { getUsers}
+
