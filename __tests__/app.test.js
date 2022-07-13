@@ -287,6 +287,41 @@ describe("GET /api", () => {
   });
 });
 
+describe(' GET /api/users/:username', () => {
+  test('200: responds the user object with a username property of butter_bridge', () => {
+    return request(app)
+    .get('/api/users/butter_bridge')
+    .expect(200)
+    .then(({ body }) => {
+      expect(body).toEqual(
+        {
+          username: 'butter_bridge',
+          name: 'jonny',
+          avatar_url:
+            'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+        }
+      )
+    })
+    .catch(error => console.log(error, "<<< error"));
+  })
+  test('404: Returns \'User not found\' when the user doesn\'t exist', () => {
+    return request(app)
+    .get('/api/users/non-existing-user')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("not found");
+    });
+  });
+  test('404: Returns \'User not found\' when the username request is send as a number', () => {
+    return request(app)
+    .get('/api/users/1')
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("not found");
+    });
+  });
+});
+
 
 
  

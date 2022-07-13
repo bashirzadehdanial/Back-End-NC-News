@@ -8,4 +8,13 @@ function fetchUsers(){
     })
  }
 
-module.exports = {fetchUsers}
+ function selectUserByUsername(username, next){
+    const sqlQuery = 'SELECT  * FROM users WHERE username = $1;';
+    return db.query(sqlQuery, [username])
+    .then(({ rows: user }) => {
+      if (user.length) return user[0];
+      return Promise.reject({status: 404, msg: "not found"})
+    })
+  };
+
+module.exports = {fetchUsers, selectUserByUsername}
