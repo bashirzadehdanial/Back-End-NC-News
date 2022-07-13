@@ -321,6 +321,58 @@ describe(' GET /api/users/:username', () => {
     });
   });
 });
+describe('PATCH /api/comments/:comment_id', () => {
+  test('check if an input is an object', () => {
+    return request(app)
+      .patch('/api/comments/4')
+      .then(({ body }) => {
+        expect(body).toBeInstanceOf(Object);
+      });
+  });
+  test('positive number of votes increments the votes', () => {
+    return request(app)
+      .patch('/api/comments/4')
+      .send({ inc_votes : 10 })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.votes).toBe(-90);
+      });
+  });
+  test('negative number of votes decrements the votes', () => {
+    return request(app)
+      .patch('/api/comments/3')
+      .send({ inc_votes : -10 })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.votes).toBe(90);
+      });
+  });
+  test('returns the updated article object', () => {
+    const updatedComment = {
+      comment_id: 9,
+      body: "Superficially charming",
+      article_id: 1,
+      author: "icellusedkars",
+      votes: 20,
+      created_at: 1577848080000, //2020-01-01 03:08:00
+    };
+    return request(app)
+      .patch('/api/comments/9')
+      .send({ inc_votes : 20 })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body).toEqual(updatedComment);
+      });
+  });
+  test('404: responds with message \'Comment not found\' when the comment with comment_id doesn\'t exist', () => {
+    return request(app)
+      .patch('/api/comments/666')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('not found');
+      });
+  });
+})
 
 
 
