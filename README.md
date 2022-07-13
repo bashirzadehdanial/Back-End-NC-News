@@ -32,7 +32,7 @@ echo 'PGDATABASE=nc_news_test' > ./.env.test
 
 5. Now you're ready to run or test the API:
 
-      To run the app, use: `npm start`. The default port is 8000.
+      To run the app, use: `npm start`. The default port is 9090.
       To test the app, use: `npm test`
 
 
