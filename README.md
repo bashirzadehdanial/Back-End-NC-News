@@ -1,4 +1,4 @@
-# NC News API
+# Danial News App API
 
 ```bash
 This API provides functionality to access and manipulate articles, comments, topics and users.
