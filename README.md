@@ -1,4 +1,4 @@
-# Danial News App API
+# Back End News App API
 
 ```bash
 This API provides functionality to access and manipulate articles, comments, topics and users.
@@ -10,7 +10,7 @@ This project is built with Node.js and Express. Data is stored in PostgreSQL. Th
 
 ## Link to the `hosted version`: 
 ```bash
- https://danial-news-app.herokuapp.com/api
+https://back-end-nc-news-13f7adb49b53.herokuapp.com/
  ```
 
 ##
